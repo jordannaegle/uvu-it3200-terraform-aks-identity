@@ -1,0 +1,28 @@
+# Terraform working files, state, and saved plans
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Local configuration and secrets
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+
+# Kubernetes credentials
+kubeconfig*
+.kube/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
