@@ -1,0 +1,5 @@
+subscription_id = "YOUR-SUBSCRIPTION-ID"
+tenant_id       = "YOUR-TENANT-ID"
+student_name    = "yourname"
+location        = "eastus"
+sp_secret_end_date = "REPLACE-WITH-A-FUTURE-UTC-TIMESTAMP"
