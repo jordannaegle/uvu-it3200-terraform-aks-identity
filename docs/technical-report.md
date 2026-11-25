@@ -47,7 +47,10 @@ The image was imported into ACR using Azure CLI.
 I ran `terraform fmt`, `terraform validate`, and reviewed deployment plans
 before applying changes. The final verification plan reported no changes.
 
-Evidence: [Insert successful apply and final no-change screenshot references.]
+Evidence:
+
+- [Successful Terraform deployment](../Screenshot%202026-11-24%20065331.png): shows `Apply complete! Resources: 8 added, 0 changed, 0 destroyed`, creation of the initial role assignments, and masked secret output.
+- [Final Terraform plan](../Final%20plan%20with%20no%20changes.png): shows `No changes. Your infrastructure matches the configuration` after the final permission cleanup and upgrade-settings update.
 
 ## Identity and Access Management
 
@@ -81,7 +84,11 @@ would grant unnecessary resource-management permissions.
 For an ABAC-enabled registry, the corresponding repository permissions must
 be evaluated instead of assuming `AcrPull` applies.
 
-Evidence: [Insert kubelet role-assignment screenshot.]
+Evidence:
+
+- [Terraform role configuration](../terraform/roles.tf): defines the kubelet identity's `AcrPull` assignment at the registry scope.
+- [Initial deployment and role-assignment creation](../Screenshot%202026-11-24%20065331.png): shows `kubelet_acr_pull` completing successfully.
+- [Successful ACR image-pull events](../service%20principle%20worload%20and%20image%20pull%20events.png): shows the kubelet pulling the digest-qualified image from my registry and starting the container.
 
 ## Service Principal Authentication Testing
 
@@ -109,7 +116,11 @@ After assigning AKS RBAC Writer at the `it3200-lab` namespace scope:
 
 These results verified both required access and permission boundaries.
 
-Evidence: [Insert before/after authentication and authorization screenshots.]
+Evidence:
+
+- [Service principal login and initial authorization failures](../Service%20Principle%20CLI.png): shows identity type `servicePrincipal`, successful kubeconfig retrieval, the initial kubelogin conversion error, and Forbidden responses.
+- [Reader access before and after propagation](../After%20adding%20reader%20role.png): shows the explicit `spn` conversion, initial Forbidden responses, subsequent namespace and Pod reads, and continued denial of node reads.
+- [Namespace-scoped permission tests](../service%20principle%20namespace%20access%20evidence.png): shows allowed Deployment and Service creation checks in `it3200-lab`, denied Deployment creation in `default`, and denied namespace deletion. The editor also shows the namespace-scoped Writer configuration; the temporary namespace-provisioning assignment visible above it was removed later.
 
 ## Personal Account Troubleshooting Comparison
 
@@ -151,7 +162,10 @@ Verification showed:
 The forwarding process later lost its connection. That ended the local
 forwarding session; it did not, by itself, establish a workload failure.
 
-Evidence: [Insert workload, image-pull events, and browser screenshots.]
+Evidence:
+
+- [Running container and image-pull events](../service%20principle%20worload%20and%20image%20pull%20events.png): shows `Running`, `Ready: True`, zero restarts, the registry image digest, and successful `Pulled`, `Created`, and `Started` events.
+- [NGINX application in the browser](../nginx%20loaded.png): shows the welcome page at `localhost:8080` through port forwarding.
 
 ## Permission and Security Analysis
 
@@ -177,6 +191,10 @@ The school identity could not create an Entra application:
 
 The school subscription also reported a six-vCPU regional quota and rejected
 the requested quota increase. `Standard_D2s_v5` was unavailable in West US 3.
+
+Evidence: [School-subscription quota view](evidence/westus3-quota-search.jpg)
+shows the West US 3 filter and DSv4/DDSv4 family limits of four vCPUs.
+This screenshot records the quota limits, not the quota-increase denial itself.
 
 A resource-group name also already existed outside the project's Terraform
 state. I did not import or delete that group.
